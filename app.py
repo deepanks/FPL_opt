@@ -32,7 +32,7 @@ elements_team = pd.merge(element_data, team_data, left_on='team', right_on='id')
 elements_team['name_fn_ln'] = elements_team['first_name'] + ' ' + elements_team['second_name']
 elements_team.head()
 
-df_points = pd.read_excel('../season_25_26/fpl_player_points_sim_2024_25_v2.xlsx')
+df_points = pd.read_csv('fpl_player_points_sim_2024_25_v2.csv')
 
 ## adjustments
 # man_u_adj = {
@@ -175,5 +175,6 @@ incl_player = st.multiselect(
 
 picks_df = run_opt(merged_data, obj_func='target_point_for_opt_10w', include_players=incl_player, exclude_players=[], exclude_teams=[ ], double_def=['Arsenal'], n_DC=False)
 print(picks_df['price'].sum())
+
 
 st.dataframe(picks_df)
