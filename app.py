@@ -20,6 +20,9 @@ import subprocess
 
 from mplsoccer import VerticalPitch, Sbopen, FontManager, inset_image
 
+import pulp
+solver = pulp.PULP_CBC_CMD(msg=False)
+
 budget = 100
 # budget = 98.7
 # budget = 98.5
@@ -129,7 +132,9 @@ def run_opt(data ,obj_func = '', include_players = [], exclude_players = [], exc
 
     model.export_mps(f'single_period_{budget}.mps')
     # command = f'"C:/Program Files/CBC Solver/bin/cbc.exe" {problem_name}.mps solve solu {problem_name}_sol.txt'
-    command = f'cbc single_period_{budget}.mps solve solu solution_sp_{budget}.txt'
+    # command = f'cbc single_period_{budget}.mps solve solu solution_sp_{budget}.txt'
+    cbc_path = pulp.apis.PULP_CBC_CMD().path
+    command = f"{cbc_path} single_period_{budget}.mps solve solu solution_sp_{budget}.txt"
     # !{command}
     subprocess.run(command, shell=True, check=True)
 
@@ -178,6 +183,7 @@ print(picks_df['price'].sum())
 
 
 st.dataframe(picks_df)
+
 
 
 
