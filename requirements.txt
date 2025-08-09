@@ -8,6 +8,8 @@ saspy
 scipy
 seaborn
 streamlit
+pulp
+
 
 
 
