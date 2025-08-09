@@ -129,7 +129,7 @@ def run_opt(data ,obj_func = '', include_players = [], exclude_players = [], exc
 
     model.export_mps(f'single_period_{budget}.mps')
     # command = f'"C:/Program Files/CBC Solver/bin/cbc.exe" {problem_name}.mps solve solu {problem_name}_sol.txt'
-    command = f'"C:/Program Files/CBC Solver/bin/cbc.exe" single_period_{budget}.mps solve solu solution_sp_{budget}.txt'
+    command = f'"cbc.exe" single_period_{budget}.mps solve solu solution_sp_{budget}.txt'
     # !{command}
     subprocess.run(command, shell=True, check=True)
 
@@ -178,4 +178,5 @@ print(picks_df['price'].sum())
 
 
 st.dataframe(picks_df)
+
 
