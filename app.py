@@ -32,7 +32,7 @@ elements_team = pd.merge(element_data, team_data, left_on='team', right_on='id')
 elements_team['name_fn_ln'] = elements_team['first_name'] + ' ' + elements_team['second_name']
 elements_team.head()
 
-df_points = pd.read_csv('fpl_player_points_sim_2024_25_v2.csv')
+df_points = pd.read_csv('fpl_player_points_sim_2024_25_v2_csv.csv')
 
 ## adjustments
 # man_u_adj = {
@@ -178,3 +178,4 @@ print(picks_df['price'].sum())
 
 
 st.dataframe(picks_df)
+
