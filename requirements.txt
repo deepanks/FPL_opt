@@ -1,16 +1,14 @@
-matplotlib==3.8.4
-matplotlib-inline
-mplfinance==0.12.10b0
-mplsoccer==1.4.0
-numpy==1.26.4
-pandas==2.2.2
-requests==2.31.0
-sasoptpy==1.0.5
-saspy==5.100.3
-scikit-learn==0.24.1
-scipy==1.13.0
-seaborn==0.13.2
-streamlit==1.48.0
+matplotlib
+mplsoccer
+numpy
+pandas
+requests
+sasoptpy
+saspy
+scipy
+seaborn
+streamlit
+
 
 
 
