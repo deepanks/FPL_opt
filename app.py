@@ -347,17 +347,19 @@ if page == "FPL Optimization":
 
 
     obj_func_input = st.pills("Objective function", ["target_point_for_opt_10w", "target_point_for_opt_5w"], default = 'target_point_for_opt_10w', selection_mode="single")
-    
+    player_name_map = dict(zip(merged_data['web_name'], merged_data['player_name']))
     incl_player = st.multiselect(
         "Include players",
         merged_data['web_name'].to_list(),
         default=[]
     )
+    incl_player_input = [player_name_map[item] for item in incl_player]
     excl_player = st.multiselect(
         "Exclude players",
         merged_data['web_name'].to_list(),
         default=[]
     )
+    excl_player_input = [player_name_map[item] for item in excl_player]
 
     excl_teams = st.multiselect(
         "Exclude teams",
@@ -380,7 +382,7 @@ if page == "FPL Optimization":
 
     if st.button("Run Optimization"):
 
-        picks_df = run_opt(merged_data, obj_func=obj_func_input, include_players=incl_player, exclude_players=excl_player, exclude_teams=excl_teams, double_def=double_def_input, n_DC=DC_imput_final)
+        picks_df = run_opt(merged_data, obj_func=obj_func_input, include_players=incl_player_input, exclude_players=excl_player_input, exclude_teams=excl_teams, double_def=double_def_input, n_DC=DC_imput_final)
         print(picks_df['price'].sum())
 
         # st.dataframe(picks_df)
@@ -402,6 +404,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
