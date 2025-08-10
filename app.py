@@ -181,11 +181,11 @@ def run_opt(data ,obj_func = '', include_players = [], exclude_players = [], exc
             is_vice = 1 if vicecap[p].get_value() > 0.5 else 0
             position = type_data.loc[lp['element_type'], 'singular_name_short']
             picks.append([
-                lp['web_name'], position, lp['element_type'], lp['name'],lp['photo'], lp['now_cost']/10, lp[obj_func] ,is_lineup, is_captain, is_vice, lp['def_contri_flag']
+                lp['web_name'], position, lp['element_type'], lp['name'],lp['photo'], lp['now_cost']/10, lp[obj_func] ,is_lineup, is_captain, is_vice, lp['def_contri_flag'], lp['template_flag']
             ])
 
     # picks_df = pd.DataFrame(picks, columns=['name', 'pos', 'team','price', 'xP','lineup', 'DC_flag', 'type']).sort_values(by=['lineup', 'type'], ascending=[False, True])
-    picks_df = pd.DataFrame(picks, columns=['name', 'pos', 'type', 'team', 'photo','price', 'xP','lineup', 'captain', 'vicecaptain', 'DC_flag']).sort_values(by=['lineup', 'type'], ascending=[False, True])
+    picks_df = pd.DataFrame(picks, columns=['name', 'pos', 'type', 'team', 'photo','price', 'xP','lineup', 'captain', 'vicecaptain', 'DC_flag', 'template_flag']).sort_values(by=['lineup', 'type'], ascending=[False, True])
     # total_xp = so.expr_sum((lineup[p] + captain[p]) * data.loc[p, f'{next_gw}_Pts'] for p in players).get_value()
 
     # print(f'Total expected value for budget {budget}: {total_xp}')
@@ -454,7 +454,7 @@ if page == "FPL Optimization":
         
         st.pyplot(plot_team(st.session_state.picks_df))
         st.write("Selected Players:")
-        st.dataframe(st.session_state.picks_df[['name', 'pos', 'team','price', 'xP','lineup', 'DC_flag']])
+        st.dataframe(st.session_state.picks_df[['name', 'pos', 'team','price', 'xP','lineup', 'DC_flag', 'template_flag']])
 
 elif page == "Expected points as per last season":
     st.title("Expected Points as per Last Season")
@@ -466,6 +466,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
