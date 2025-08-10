@@ -227,7 +227,7 @@ def plot_team(picks_df):
 
     # axes['title'].text(0.6, 0.7, ' M.Salah (pr:127 xp:6.26 ),Strand Larsen (pr:55 xp:4.21 )', ha='center', va='center', color='white',fontsize=10)
 
-    axes['title'].text(0.5, 1, 'Gameweek 10 team', ha='center', va='center', color='white',
+    axes['title'].text(0.5, 1, 'Gameweek 1 team', ha='center', va='center', color='white',
                     fontsize=11)
 
     axes['title'].text(0.5, 0.05, f"Total Cost: {picks_df['price'].sum()}", ha='center', va='center', color='white',
@@ -401,6 +401,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
