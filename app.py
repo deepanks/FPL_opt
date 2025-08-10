@@ -416,7 +416,7 @@ if page == "FPL Optimization":
             # st.dataframe(picks_df)
             st.session_state.picks_df = picks_df
         except:
-            st.write('Check what you have selected')
+            st.title('ERROR: Check what you have selected')
 
     if st.session_state.picks_df is not None:
         
@@ -434,6 +434,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
