@@ -394,9 +394,14 @@ if page == "FPL Optimization":
 elif page == "Expected points as per last season":
     st.title("Expected Points as per Last Season")
     
-    st.write("This section is under development. Please check back later for updates.")
+    # st.write("This section is under development. Please check back later for updates.")
+    st.image('fwd.png')
+    st.image('mid.png')
+    st.image('def.png')
+    st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
