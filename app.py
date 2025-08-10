@@ -409,12 +409,14 @@ if page == "FPL Optimization":
 
 
     if st.button("Run Optimization"):
-
-        picks_df = run_opt(merged_data, obj_func=obj_func_input, include_players=incl_player_input, exclude_players=excl_player_input, exclude_teams=excl_teams, double_def=double_def_input, n_DC=DC_imput_final)
-        print(picks_df['price'].sum())
-
-        # st.dataframe(picks_df)
-        st.session_state.picks_df = picks_df
+        try:
+            picks_df = run_opt(merged_data, obj_func=obj_func_input, include_players=incl_player_input, exclude_players=excl_player_input, exclude_teams=excl_teams, double_def=double_def_input, n_DC=DC_imput_final)
+            print(picks_df['price'].sum())
+    
+            # st.dataframe(picks_df)
+            st.session_state.picks_df = picks_df
+        except:
+            st.write('Check what you have selected')
 
     if st.session_state.picks_df is not None:
         
@@ -432,6 +434,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
