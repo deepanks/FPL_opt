@@ -390,7 +390,7 @@ if page == "FPL Optimization":
         
         st.pyplot(plot_team(st.session_state.picks_df))
         st.write("Selected Players:")
-        st.dataframe(st.session_state.picks_df['name', 'pos', 'team','price', 'xP','lineup', 'DC_flag'])
+        st.dataframe(st.session_state.picks_df[['name', 'pos', 'team','price', 'xP','lineup', 'DC_flag']])
 
 elif page == "Expected points as per last season":
     st.title("Expected Points as per Last Season")
@@ -402,6 +402,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
