@@ -168,6 +168,169 @@ def run_opt(data ,obj_func = '', include_players = [], exclude_players = [], exc
 
     return picks_df
 
+def plot_team(picks_df):
+    picks_df_plot = picks_df.copy()
+    picks_df_plot_lineup = picks_df_plot[picks_df_plot['lineup'] == 1]
+    picks_df_plot_lineup = picks_df_plot_lineup.sort_values(by='type', ascending=False)
+
+    formation_dic = picks_df_plot_lineup['pos'].value_counts().sort_index().to_dict()
+    formation = [ formation_dic.get('DEF', 4), formation_dic.get('MID', 4), formation_dic.get('FWD', 2)]
+    formation_str = ''.join(map(str, formation))
+    print(formation)
+
+    picks_df_plot_lineup['photo'] = 'https://resources.premierleague.com/premierleague/photos/players/110x140/p'+picks_df_plot_lineup['photo'].astype(str).str[:-4]+'.png'
+    # picks_df_plot_lineup['position_id'] = [11, 9, 10, 8, 4, 7, 3, 6, 5, 2, 1]
+    # picks_df_plot_lineup['position_id'] = [11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
+    picks_df_plot_lineup['position_id'] = [1, 6, 5, 4, 2, 3, 7, 11, 8, 10, 9][::-1]
+
+    picks_df_plot_bench = picks_df_plot[picks_df_plot['lineup'] == 0]
+    picks_df_plot_bench['photo'] = 'https://resources.premierleague.com/premierleague/photos/players/110x140/p'+picks_df_plot_bench['photo'].astype(str).str[:-4]+'.png'
+    picks_df_plot_bench_name = picks_df_plot_bench['name'].to_list()
+    picks_df_plot_bench_team = picks_df_plot_bench['team'].to_list()
+    picks_df_plot_bench_price = picks_df_plot_bench['price'].to_list()
+    picks_df_plot_bench_xP = picks_df_plot_bench['xP'].round(1).to_list()
+    picks_df_plot_bench_photo = picks_df_plot_bench['photo'].to_list()
+    picks_df_plot_lineup['xP'] = picks_df_plot_lineup['xP'].round(1)
+
+    totw_player_data = picks_df_plot_lineup
+
+    images = [Image.open(urlopen(url)) for url in totw_player_data['photo']]
+
+    totw_player_data['player'] = totw_player_data['name']
+    totw_player_data['score'] = totw_player_data['xP']
+    totw_player_data = totw_player_data.reset_index()
+    
+    
+    formation_dic = picks_df_plot_lineup['pos'].value_counts().sort_index().to_dict()
+    formation = [ formation_dic.get('DEF', 4), formation_dic.get('MID', 4), formation_dic.get('FWD', 2)]
+    formation_str = ''.join(map(str, formation))
+    print(formation_str)
+
+    # setup figure
+    pitch = VerticalPitch(pitch_type='opta', pitch_color='teal', line_color='white', line_alpha=0.2,
+                        line_zorder=3)
+    fig, axes = pitch.grid(endnote_height=0.17, figheight=8, title_height=0.05, title_space=0, space=0)
+    fig.set_facecolor('teal')
+
+    # title
+    axes['title'].axis('off')
+    # axes['title'].text(0.5, 0.9, 'GW 10', ha='center', va='bottom', color='white',fontsize=12)
+    # axes['title'].text(0.25, 0.8, 'Sell', ha='right', va='center', color='white',fontsize=10)
+    # axes['title'].text(0.75, 0.8, 'Buy', ha='right', va='center', color='white',fontsize=10)
+    # Buy: M.Salah (pr:127 xp:6.26 ),Strand Larsen (pr:55 xp:4.21 ),Cunha (pr:66 xp:4.33 ),
+    # Sell: Luis Díaz (pr:78 xp:3.88 ),N.Jackson (pr:79 xp:2.96 ),Watkins (pr:91 xp:3.29 ),
+    # axes['title'].text(0.5, 0.7, 'Buy: M.Salah (pr:127 xp:6.26 ),Strand Larsen (pr:55 xp:4.21 )', ha='center', va='center', color='black',fontsize=9, bbox=dict(facecolor='greenyellow', boxstyle='round,pad=0.2', linewidth=0))
+    # axes['title'].text(0.5, 0.5, 'Sell: Luis Díaz (pr:78 xp:3.88 ),N.Jackson (pr:79 xp:2.96 )', ha='center', va='center', color='black',fontsize=9, bbox=dict(facecolor='tomato', boxstyle='round,pad=0.2', linewidth=0))
+    # axes['title'].text(0.5, 0.5, '⇔', ha='center', va='center', color='white',fontsize=16)
+
+    # title_image = inset_image((0.75+1)/2, 0.6, image, height=0.3, ax=axes['title'])
+
+    # axes['title'].text(0.6, 0.7, ' M.Salah (pr:127 xp:6.26 ),Strand Larsen (pr:55 xp:4.21 )', ha='center', va='center', color='white',fontsize=10)
+
+    axes['title'].text(0.5, 1, 'Gameweek 10 team', ha='center', va='center', color='white',
+                    fontsize=11)
+
+    axes['title'].text(0.5, 0.05, f"Total Cost: {picks_df['price'].sum()}", ha='center', va='center', color='white',
+                    fontsize=9, bbox=dict(facecolor='darkred', boxstyle='round,pad=0.2', linewidth=0))
+
+    # axes['title'].text(0.5, 0.3, 'Round 9', ha='center', va='center', color='white', fontsize=14)
+
+    # plot the league logo using the inset_image method for utils
+    # LEAGUE_URL = 'https://www.thesportsdb.com/images/media/league/badge/kxo7zf1656519439.png'
+    # image = Image.open(urlopen(LEAGUE_URL))
+    # title_image = inset_image(0.9, 0.5, image, height=1, ax=axes['title'])
+
+    axes['endnote'].axis('off')
+    LEAGUE_URL = 'https://resources.premierleague.com/premierleague/photos/players/110x140/p219847.png'
+    image = Image.open(urlopen(LEAGUE_URL))
+    # Reduce the size of the image
+    # new_size = (20, 20)  # New size (width, height)
+    # image = image.resize(new_size, Image.LANCZOS)
+    title_image = inset_image((0+0.25)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[0])), height=0.5, ax=axes['endnote'])
+    title_image = inset_image((0.25+0.5)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[1])), height=0.5, ax=axes['endnote'])
+    title_image = inset_image((0.5+0.75)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[2])), height=0.5, ax=axes['endnote'])
+    title_image = inset_image((0.75+1)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[3])), height=0.5, ax=axes['endnote'])
+    # axes['endnote'].text(0.9, 0.1, 'Havertz', ha='center', va='center', color='white',
+    #                    fontsize=11)
+
+    # Add the player name below the image
+    # axes['endnote'].text((0+0.25)/2, 0.4, picks_df_plot_bench_name[0], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes)
+    # axes['endnote'].text((0.25+0.5)/2, 0.4, picks_df_plot_bench_name[1], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes)
+    # axes['endnote'].text((0.5+0.75)/2, 0.4, picks_df_plot_bench_name[2], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes)
+    # axes['endnote'].text((0.75+1)/2, 0.4, picks_df_plot_bench_name[3], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes)
+
+    # axes['endnote'].text((0+0.25)/2, 0.25, picks_df_plot_bench_xP[0], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='green', boxstyle='round,pad=0.2', linewidth=0))
+    # axes['endnote'].text((0.25+0.5)/2, 0.25, picks_df_plot_bench_xP[1], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='green', boxstyle='round,pad=0.2', linewidth=0))
+    # axes['endnote'].text((0.5+0.75)/2, 0.25, picks_df_plot_bench_xP[2], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='green', boxstyle='round,pad=0.2', linewidth=0))
+    # axes['endnote'].text((0.75+1)/2, 0.25, picks_df_plot_bench_xP[3], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='green', boxstyle='round,pad=0.2', linewidth=0))
+
+    # axes['endnote'].text((0+0.25)/2, 0.1, picks_df_plot_bench_price[0], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='tomato', boxstyle='round,pad=0.2', linewidth=0))
+    # axes['endnote'].text((0.25+0.5)/2, 0.1, picks_df_plot_bench_price[1], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='tomato', boxstyle='round,pad=0.2', linewidth=0))
+    # axes['endnote'].text((0.5+0.75)/2, 0.1, picks_df_plot_bench_price[2], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='tomato', boxstyle='round,pad=0.2', linewidth=0))
+    # axes['endnote'].text((0.75+1)/2, 0.1, picks_df_plot_bench_price[3], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='tomato', boxstyle='round,pad=0.2', linewidth=0))
+
+    axes['endnote'].text((0+0.25)/2, 0.4, picks_df_plot_bench_name[0], ha='center', va='center', color='black', fontsize=7, transform=axes['endnote'].transAxes, bbox=dict(facecolor='white', boxstyle='round,pad=0.2', linewidth=0))
+    axes['endnote'].text((0.25+0.5)/2, 0.4, picks_df_plot_bench_name[1], ha='center', va='center', color='black', fontsize=7, transform=axes['endnote'].transAxes, bbox=dict(facecolor='white', boxstyle='round,pad=0.2', linewidth=0))
+    axes['endnote'].text((0.5+0.75)/2, 0.4, picks_df_plot_bench_name[2], ha='center', va='center', color='black', fontsize=7, transform=axes['endnote'].transAxes, bbox=dict(facecolor='white', boxstyle='round,pad=0.2', linewidth=0))
+    axes['endnote'].text((0.75+1)/2, 0.4, picks_df_plot_bench_name[3], ha='center', va='center', color='black', fontsize=7, transform=axes['endnote'].transAxes, bbox=dict(facecolor='white', boxstyle='round,pad=0.2', linewidth=0))
+
+    axes['endnote'].text((0+0.25)/2, 0.25, picks_df_plot_bench_team[0], ha='center', va='center', color='white', fontsize=7, transform=axes['endnote'].transAxes)
+    axes['endnote'].text((0.25+0.5)/2, 0.25, picks_df_plot_bench_team[1], ha='center', va='center', color='white', fontsize=7, transform=axes['endnote'].transAxes)
+    axes['endnote'].text((0.5+0.75)/2, 0.25, picks_df_plot_bench_team[2], ha='center', va='center', color='white', fontsize=7, transform=axes['endnote'].transAxes)
+    axes['endnote'].text((0.75+1)/2, 0.25, picks_df_plot_bench_team[3], ha='center', va='center', color='white', fontsize=7, transform=axes['endnote'].transAxes)
+
+    axes['endnote'].text((0+0.25)/2 - 0.05, 0.1, picks_df_plot_bench_xP[0], ha='center', va='center', color='black', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='palegreen', boxstyle='round,pad=0.2', linewidth=0))
+    axes['endnote'].text((0.25+0.5)/2- 0.05, 0.1, picks_df_plot_bench_xP[1], ha='center', va='center', color='black', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='palegreen', boxstyle='round,pad=0.2', linewidth=0))
+    axes['endnote'].text((0.5+0.75)/2- 0.05, 0.1, picks_df_plot_bench_xP[2], ha='center', va='center', color='black', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='palegreen', boxstyle='round,pad=0.2', linewidth=0))
+    axes['endnote'].text((0.75+1)/2- 0.05, 0.1, picks_df_plot_bench_xP[3], ha='center', va='center', color='black', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='palegreen', boxstyle='round,pad=0.2', linewidth=0))
+
+    axes['endnote'].text((0+0.25)/2+ 0.05, 0.1, picks_df_plot_bench_price[0], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='darkred', boxstyle='round,pad=0.2', linewidth=0))
+    axes['endnote'].text((0.25+0.5)/2+ 0.05, 0.1, picks_df_plot_bench_price[1], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='darkred', boxstyle='round,pad=0.2', linewidth=0))
+    axes['endnote'].text((0.5+0.75)/2+ 0.05, 0.1, picks_df_plot_bench_price[2], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='darkred', boxstyle='round,pad=0.2', linewidth=0))
+    try:
+        axes['endnote'].text((0.75+1)/2+ 0.05, 0.1, picks_df_plot_bench_price[3], ha='center', va='center', color='white', fontsize=9, transform=axes['endnote'].transAxes, bbox=dict(facecolor='darkred', boxstyle='round,pad=0.2', linewidth=0))
+    except:
+        pass
+
+
+
+    text_names = pitch.formation(formation_str, kind='text', 
+                                positions=totw_player_data.position_id,
+                                text=totw_player_data['name'], ax=axes['pitch'], flip = True,
+                                xoffset=-2,  # offset the player names from the centers
+                                ha='center', va='center', color='black', fontsize=7,
+                                bbox=dict(facecolor='white', boxstyle='round,pad=0.2', linewidth=0))
+
+    names = pitch.formation(formation_str, kind='text', 
+                                positions=totw_player_data.position_id,
+                                text=totw_player_data['team'], ax=axes['pitch'], flip = True,
+                                xoffset=-5,  # offset the player names from the centers
+                                ha='center', va='center', color='white', fontsize=7)
+    text_scores = pitch.formation(formation_str, kind='text', 
+                                positions=totw_player_data.position_id,
+                                text=totw_player_data['xP'], ax=axes['pitch'],flip = True,
+                                xoffset=-9,yoffset=5,  # offset the scores from the centers
+                                ha='center', va='center', color='black', fontsize=9,
+                                bbox=dict(facecolor='palegreen', boxstyle='round,pad=0.2', linewidth=0))
+
+    text_scores = pitch.formation(formation_str, kind='text', 
+                                positions=totw_player_data.position_id,
+                                text=totw_player_data['price'], ax=axes['pitch'],flip = True,
+                                xoffset=-9,yoffset=-5,  # offset the scores from the centers
+                                ha='center', va='center', color='white', fontsize=9,
+                                bbox=dict(facecolor='darkred', boxstyle='round,pad=0.2', linewidth=0))
+    badge_axes = pitch.formation(formation_str, kind='image', 
+                                positions=totw_player_data.position_id,
+                                image=images, height=10, ax=axes['pitch'],flip = True,
+                                xoffset=5,  # offset the images from the centers
+                                )
+
+
+    # plt.savefig('FPL/442.png', bbox_inches='tight', pad_inches=0.1, dpi=300)
+    # plt.show()
+    return fig
+
+
 
 st.sidebar.title("Menu")
 page = st.sidebar.radio(
@@ -175,19 +338,58 @@ page = st.sidebar.radio(
     ["FPL Optimization", "Expected points as per last season"]
 )
 
+if "picks_df" not in st.session_state:
+    st.session_state.picks_df = None
+
 if page == "FPL Optimization":
     st.title("FPL Optimization")
+
+
+    obj_func_input = st.pills("Objective function", ["target_point_for_opt_10w", "target_point_for_opt_5w"], default = 'target_point_for_opt_10w', selection_mode="single")
     
     incl_player = st.multiselect(
         "Include players",
         merged_data['player_name'].to_list(),
         default=[]
     )
+    excl_player = st.multiselect(
+        "Exclude players",
+        merged_data['player_name'].to_list(),
+        default=[]
+    )
 
-    picks_df = run_opt(merged_data, obj_func='target_point_for_opt_10w', include_players=incl_player, exclude_players=[], exclude_teams=[ ], double_def=['Arsenal'], n_DC=False)
-    print(picks_df['price'].sum())
+    excl_teams = st.multiselect(
+        "Exclude teams",
+        list(merged_data['team'].unique()),
+        default=[]
+    )
 
-    st.dataframe(picks_df)
+    double_def_input = st.multiselect(
+        "Force Double Defence",
+        list(merged_data['team'].unique()),
+        default=[]
+    )
+
+    # DC_input = st.button('Force Defensive Contribution')
+    # if DC_input:
+    n_DC_input = st.number_input("Number of players with defensive contribution", min_value=0, max_value=5, value=0, step=1)
+
+    DC_imput_final = False if n_DC_input == 0 else n_DC_input
+
+
+    if st.button("Run Optimization"):
+
+        picks_df = run_opt(merged_data, obj_func=obj_func_input, include_players=incl_player, exclude_players=excl_player, exclude_teams=excl_teams, double_def=double_def_input, n_DC=DC_imput_final)
+        print(picks_df['price'].sum())
+
+        # st.dataframe(picks_df)
+        st.session_state.picks_df = picks_df
+
+    if st.session_state.picks_df is not None:
+        
+        st.pyplot(plot_team(st.session_state.picks_df))
+        st.write("Selected Players:")
+        st.dataframe(st.session_state.picks_df)
 
 elif page == "Expected points as per last season":
     st.title("Expected Points as per Last Season")
@@ -195,6 +397,7 @@ elif page == "Expected points as per last season":
     st.write("This section is under development. Please check back later for updates.")
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
