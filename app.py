@@ -169,20 +169,33 @@ def run_opt(data ,obj_func = '', include_players = [], exclude_players = [], exc
     return picks_df
 
 
-incl_player = st.multiselect(
-    "Include players",
-    merged_data['player_name'].to_list(),
-    default=[],
+st.sidebar.title("Menu")
+page = st.sidebar.radio(
+    "Select Section",
+    ["FPL Optimization", "Expected points as per last season"]
 )
 
+if page == "FPL Optimization":
+    st.title("FPL Optimization")
+    
+    incl_player = st.multiselect(
+        "Include players",
+        merged_data['player_name'].to_list(),
+        default=[]
+    )
 
+    picks_df = run_opt(merged_data, obj_func='target_point_for_opt_10w', include_players=incl_player, exclude_players=[], exclude_teams=[ ], double_def=['Arsenal'], n_DC=False)
+    print(picks_df['price'].sum())
 
+    st.dataframe(picks_df)
 
-picks_df = run_opt(merged_data, obj_func='target_point_for_opt_10w', include_players=incl_player, exclude_players=[], exclude_teams=[ ], double_def=['Arsenal'], n_DC=False)
-print(picks_df['price'].sum())
+elif page == "Expected points as per last season":
+    st.title("Expected Points as per Last Season")
+    
+    st.write("This section is under development. Please check back later for updates.")
+    # Placeholder for future content
+    # You can add charts, tables, or any other relevant information here.
 
-
-st.dataframe(picks_df)
 
 
 
