@@ -350,12 +350,12 @@ if page == "FPL Optimization":
     
     incl_player = st.multiselect(
         "Include players",
-        merged_data['player_name'].to_list(),
+        merged_data['web_name'].to_list(),
         default=[]
     )
     excl_player = st.multiselect(
         "Exclude players",
-        merged_data['player_name'].to_list(),
+        merged_data['web_name'].to_list(),
         default=[]
     )
 
@@ -402,6 +402,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
