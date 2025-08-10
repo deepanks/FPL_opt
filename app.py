@@ -431,10 +431,16 @@ if page == "FPL Optimization":
 
     DC_imput_final = False if n_DC_input == 'No constraint' else n_DC_input
 
+    n_template_input = st.radio("Number of template players", ['No constraint', 0,1,2,3,4,5,6,7,8,9,10,11], horizontal=True)
+
+    n_template_input_final = False if n_template_input == 'No constraint' else n_template_input
+
+    strong_bench_input = st.checkbox('Keep strong bench')
+
 
     if st.button("Run Optimization"):
         try:
-            picks_df = run_opt(merged_data, obj_func=obj_func_input, include_players=incl_player_input, exclude_players=excl_player_input, exclude_teams=excl_teams, double_def=double_def_input, n_DC=DC_imput_final)
+            picks_df = run_opt(merged_data, obj_func=obj_func_input, include_players=incl_player_input, exclude_players=excl_player_input, exclude_teams=excl_teams, double_def=double_def_input, n_DC=DC_imput_final, n_template = n_template_input_final, strong_bench = strong_bench_input)
             print(picks_df['price'].sum())
     
             # st.dataframe(picks_df)
@@ -458,6 +464,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
