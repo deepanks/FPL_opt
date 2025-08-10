@@ -73,11 +73,27 @@ merged_data['def_contri_flag'] = np.where(merged_data['player_name'].isin(def_co
 # merged_data['target_point_for_opt_10w'] = np.where(merged_data['player_name'].isin(man_u_adj), merged_data['target_point_for_opt_10w']*0.75, merged_data['target_point_for_opt_10w'])
 # merged_data['target_point_for_opt_5w'] = np.where(merged_data['player_name'].isin(man_u_adj), merged_data['target_point_for_opt_5w']*0.75, merged_data['target_point_for_opt_10w'])
 
+merged_data['selected_by_percent'] = merged_data['selected_by_percent'].astype(float)
+merged_data['position_rank'] = (
+    merged_data.groupby('position')['selected_by_percent']
+    .rank(method='first', ascending=False)
+)
+top5_ownership = (
+    merged_data
+    .sort_values(by=['position', 'selected_by_percent'], ascending=[True, False])
+    .groupby('position')
+    .head(5)[['player_name', 'team', 'position', 'selected_by_percent', 'position_rank']]
+)
+
+top5_ownership = top5_ownership[(top5_ownership['position'] != 'Goalkeeper') | ((top5_ownership['position'] == 'Goalkeeper') & (top5_ownership['position_rank'] < 4))]
+
+merged_data['template_flag'] = np.where((merged_data['selected_by_percent'] > 20) | (merged_data['player_name'].isin(top5_ownership['player_name'])), 1, 0)
+
 print(merged_data.shape)
 merged_data.head()
 
 
-def run_opt(data ,obj_func = '', include_players = [], exclude_players = [], exclude_teams = [], double_def=[], n_DC = False):
+def run_opt(data ,obj_func = '', include_players = [], exclude_players = [], exclude_teams = [], double_def=[], n_DC = False, n_template = False, strong_bench = False):
     type_data = pd.DataFrame(fpl_data['element_types']).set_index(['id'])
     
 
@@ -120,13 +136,20 @@ def run_opt(data ,obj_func = '', include_players = [], exclude_players = [], exc
 
     if n_DC:
         model.add_constraints( so.expr_sum(squad[p] for p in players if data.loc[p, 'def_contri_flag'] == 1) == n_DC, name='def_contri_flag')
+    if n_template:
+        model.add_constraints( so.expr_sum(squad[p] for p in players if data.loc[p, 'template_flag'] == 1) >= n_template, name='min_n_template_flag')
 
     # model.add_constraints(so.expr_sum(squad[p] ))
     # model.add_constraints(squad[merged_data[merged_data['player_name'] == 'Erling Haaland'].index.to_list()[0]] == 1, name = 'noHalland')
 
     # total_points = so.expr_sum(data.loc[p, f'{next_gw}_Pts'] * (lineup[p] + captain[p] + 0.1 * vicecap[p]) for p in players)
     # total_points = so.expr_sum(data.loc[p, 'target_point_for_opt'] * (lineup[p] + captain[p] + 0.1 * vicecap[p]) for p in players)
-    total_points = so.expr_sum(data.loc[p, obj_func] * (lineup[p] + 0.1*captain[p] + 0.1 * vicecap[p] + 0.01*squad[p]) for p in players)
+    
+    # total_points = so.expr_sum(data.loc[p, obj_func] * (lineup[p] + 0.1*captain[p] + 0.1 * vicecap[p] + 0.01*squad[p]) for p in players)
+    if strong_bench == False:
+        total_points = so.expr_sum(data.loc[p, obj_func] * (lineup[p] + 0.1*captain[p] + 0.1 * vicecap[p] + 0.01*squad[p]) for p in players)
+    else:
+        total_points = so.expr_sum(data.loc[p, obj_func] * (lineup[p] + 0.1*captain[p] + 0.1 * vicecap[p]+ 0.8*squad[p]) for p in players) 
 
     model.set_objective(-total_points, sense='N', name='total_xp')
 
@@ -403,9 +426,10 @@ if page == "FPL Optimization":
 
     # DC_input = st.button('Force Defensive Contribution')
     # if DC_input:
-    n_DC_input = st.number_input("Number of players with defensive contribution", min_value=0, max_value=5, value=0, step=1)
+    # n_DC_input = st.number_input("Number of players with defensive contribution", min_value=0, max_value=5, value=0, step=1)
+    n_DF_input = st.radio("Number of players with defensive contribution", ['No constraint', 0,1,2,3,4,5], horizontal=True)
 
-    DC_imput_final = False if n_DC_input == 0 else n_DC_input
+    DC_imput_final = False if n_DC_input == 'No constraint' else n_DC_input
 
 
     if st.button("Run Optimization"):
@@ -434,6 +458,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
