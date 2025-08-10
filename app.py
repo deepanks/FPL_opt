@@ -427,7 +427,7 @@ if page == "FPL Optimization":
     # DC_input = st.button('Force Defensive Contribution')
     # if DC_input:
     # n_DC_input = st.number_input("Number of players with defensive contribution", min_value=0, max_value=5, value=0, step=1)
-    n_DF_input = st.radio("Number of players with defensive contribution", ['No constraint', 0,1,2,3,4,5], horizontal=True)
+    n_DC_input = st.radio("Number of players with defensive contribution", ['No constraint', 0,1,2,3,4,5], horizontal=True)
 
     DC_imput_final = False if n_DC_input == 'No constraint' else n_DC_input
 
@@ -458,6 +458,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
