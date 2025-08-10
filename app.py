@@ -343,13 +343,22 @@ if "picks_df" not in st.session_state:
     st.session_state.picks_df = None
 
 if page == "FPL Optimization":
-    st.title("FPL Optimization")
+    st.header("FPL Optimization")
+    st.subheader("Try running with no constraints first, then add constraints to see how it affects the picks.")
+    st.write("This tool helps you optimize your Fantasy Premier League (FPL) team based on last year's points (see next tab for details) and various constraints.")
+
+    obj_func_map = {
+        'First 10 weeks': 'target_point_for_opt_10w',
+        'First 5 weeks': 'target_point_for_opt_5w'
+    }
+    obj_func_input_temp = st.pills("Objective function", ["First 10 weeks", "First 5 weeks"], default = 'First 10 weeks', selection_mode="single")
+    obj_func_input = obj_func_map[obj_func_input_temp]
 
 
-    obj_func_input = st.pills("Objective function", ["target_point_for_opt_10w", "target_point_for_opt_5w"], default = 'target_point_for_opt_10w', selection_mode="single")
+    
     player_name_map = dict(zip(merged_data['web_name'], merged_data['player_name']))
     incl_player = st.multiselect(
-        "Include players",
+        "Include players (Forces the player in your final squad)",
         merged_data['web_name'].to_list(),
         default=[]
     )
@@ -404,6 +413,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
