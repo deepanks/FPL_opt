@@ -247,10 +247,29 @@ def plot_team(picks_df):
     # Reduce the size of the image
     # new_size = (20, 20)  # New size (width, height)
     # image = image.resize(new_size, Image.LANCZOS)
-    title_image = inset_image((0+0.25)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[0])), height=0.5, ax=axes['endnote'])
-    title_image = inset_image((0.25+0.5)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[1])), height=0.5, ax=axes['endnote'])
-    title_image = inset_image((0.5+0.75)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[2])), height=0.5, ax=axes['endnote'])
-    title_image = inset_image((0.75+1)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[3])), height=0.5, ax=axes['endnote'])
+    # title_image = inset_image((0+0.25)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[0])), height=0.5, ax=axes['endnote'])
+    # title_image = inset_image((0.25+0.5)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[1])), height=0.5, ax=axes['endnote'])
+    # title_image = inset_image((0.5+0.75)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[2])), height=0.5, ax=axes['endnote'])
+    # title_image = inset_image((0.75+1)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[3])), height=0.5, ax=axes['endnote'])
+    try:
+        title_image = inset_image((0+0.25)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[0])), height=0.5, ax=axes['endnote'])
+    except Exception as e:
+        print(f"Bench photo 0 not loaded: {e}")
+
+    try:
+        title_image = inset_image((0.25+0.5)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[1])), height=0.5, ax=axes['endnote'])
+    except Exception as e:
+        print(f"Bench photo 1 not loaded: {e}")
+
+    try:
+        title_image = inset_image((0.5+0.75)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[2])), height=0.5, ax=axes['endnote'])
+    except Exception as e:
+        print(f"Bench photo 2 not loaded: {e}")
+
+    try:
+        title_image = inset_image((0.75+1)/2, 0.8, Image.open(urlopen(picks_df_plot_bench_photo[3])), height=0.5, ax=axes['endnote'])
+    except Exception as e:
+        print(f"Bench photo 3 not loaded: {e}")
     # axes['endnote'].text(0.9, 0.1, 'Havertz', ha='center', va='center', color='white',
     #                    fontsize=11)
 
@@ -413,6 +432,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
