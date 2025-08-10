@@ -46,7 +46,7 @@ df_points = pd.read_csv('fpl_player_points_sim_2024_25_v2_csv.csv')
 
 
 
-for each in ['id_x','element_type', 'now_cost' , 'web_name', 'name', 'photo']:
+for each in ['id_x','element_type', 'now_cost' , 'web_name', 'name', 'photo', 'selected_by_percent']:
     df_points[each] = df_points['player_name'].map(dict(zip(elements_team['name_fn_ln'], elements_team[each])))
     print(each,' not available for:', df_points[each].isnull().sum())
 
@@ -458,6 +458,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
