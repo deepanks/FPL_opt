@@ -53,8 +53,10 @@ for each in ['id_x','element_type', 'now_cost' , 'web_name', 'name', 'photo', 's
 merged_data = df_points.copy()
 merged_data.set_index(['id_x'], inplace=True)
 
+
 merged_data['target_point_for_opt_10w'] = merged_data['first_10_mean'].fillna(0)
 merged_data['target_point_for_opt_5w'] = merged_data['first_5_mean'].fillna(0)
+merged_data['target_point_for_opt_38w'] = merged_data['total_points_non_zero_mean'].fillna(0)
 
 def_contri_pt = {
     "Joško Gvardiol": 10,
@@ -391,9 +393,10 @@ if page == "FPL Optimization":
 
     obj_func_map = {
         'First 10 weeks': 'target_point_for_opt_10w',
-        'First 5 weeks': 'target_point_for_opt_5w'
+        'First 5 weeks': 'target_point_for_opt_5w',
+        'First 38 weeks': 'target_point_for_opt_28w'
     }
-    obj_func_input_temp = st.pills("Objective function", ["First 10 weeks", "First 5 weeks"], default = 'First 10 weeks', selection_mode="single")
+    obj_func_input_temp = st.pills("Objective function", ["First 38 weeks","First 10 weeks", "First 5 weeks"], default = 'First 10 weeks', selection_mode="single")
     obj_func_input = obj_func_map[obj_func_input_temp]
 
 
@@ -466,6 +469,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
