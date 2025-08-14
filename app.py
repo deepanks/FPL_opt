@@ -394,7 +394,7 @@ if page == "FPL Optimization":
     obj_func_map = {
         'First 10 weeks': 'target_point_for_opt_10w',
         'First 5 weeks': 'target_point_for_opt_5w',
-        'First 38 weeks': 'target_point_for_opt_28w'
+        'First 38 weeks': 'target_point_for_opt_38w'
     }
     obj_func_input_temp = st.pills("Objective function", ["First 38 weeks","First 10 weeks", "First 5 weeks"], default = 'First 10 weeks', selection_mode="single")
     obj_func_input = obj_func_map[obj_func_input_temp]
@@ -469,6 +469,7 @@ elif page == "Expected points as per last season":
     st.image('gk.png')
     # Placeholder for future content
     # You can add charts, tables, or any other relevant information here.
+
 
 
 
